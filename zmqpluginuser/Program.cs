@@ -20,7 +20,8 @@ namespace zmqpluginuser
                     int load_result = my_plugin.load(JsonConvert.SerializeObject(
                         new config
                         {
-                            protocol = "msgpack"
+                            protocol = "msgpack",
+                            plugin_connection_string = "tcp://*:5555"
                         }
                        ));
                     if (load_result == 0)

@@ -5,8 +5,11 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)picojson;$(SolutionDir)picojson_serializer;$(SolutionDir)msgpack-0.5.8\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)picojson;$(SolutionDir)picojson_serializer;$(SolutionDir)msgpack-0.5.8\include;C:\Program Files (x86)\ZeroMQ 4.0.3\include;$(SolutionDir)cppzmq;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>C:\Program Files (x86)\ZeroMQ 4.0.3\lib</AdditionalLibraryDirectories>
+    </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
 </Project>

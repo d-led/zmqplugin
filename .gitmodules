@@ -4,3 +4,6 @@
 [submodule "picojson_serializer"]
 	path = picojson_serializer
 	url = https://github.com/d-led/picojson_serializer.git
+[submodule "cppzmq"]
+	path = cppzmq
+	url = https://github.com/zeromq/cppzmq.git
