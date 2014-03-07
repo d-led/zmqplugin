@@ -1,0 +1,6 @@
+[submodule "picojson"]
+	path = picojson
+	url = https://github.com/kazuho/picojson
+[submodule "picojson_serializer"]
+	path = picojson_serializer
+	url = https://github.com/d-led/picojson_serializer.git

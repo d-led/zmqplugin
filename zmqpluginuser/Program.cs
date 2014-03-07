@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -8,14 +9,24 @@ using System.Threading.Tasks;
 
 namespace zmqpluginuser
 {
-    class Program {
+    class Program
+    {
         static void Main(string[] args)
         {
             try
             {
                 using (var my_plugin = new zmq_plugin("zmqplugin.dll"))
                 {
-                    Console.WriteLine(my_plugin.load("bla"));
+                    int load_result = my_plugin.load(JsonConvert.SerializeObject(
+                        new config
+                        {
+                            protocol = "msgpack"
+                        }
+                       ));
+                    if (load_result == 0)
+                    {
+                        Console.WriteLine("loaded correctly");
+                    }
                 }
 
             }

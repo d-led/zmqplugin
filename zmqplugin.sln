@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zmqplugin", "zmqplugin\zmqplugin.vcxproj", "{384DC310-EC1C-45FA-AD24-9266D3077D6D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "zmqpluginuser", "zmqpluginuser\zmqpluginuser.csproj", "{1A7C74C0-C34C-4608-9F5B-4B5CBB83F7A6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{384DC310-EC1C-45FA-AD24-9266D3077D6D} = {384DC310-EC1C-45FA-AD24-9266D3077D6D}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
