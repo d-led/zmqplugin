@@ -5,7 +5,7 @@
   <PropertyGroup />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)picojson;$(SolutionDir)picojson_serializer</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)picojson;$(SolutionDir)picojson_serializer;$(SolutionDir)msgpack-0.5.8\include</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup />

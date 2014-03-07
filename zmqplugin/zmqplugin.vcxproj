@@ -10,6 +10,14 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\msgpack-0.5.8\msgpack_vc11.vcxproj">
+      <Project>{122a2ea4-b283-4241-9655-786de78283b2}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="zmqplugin.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{384DC310-EC1C-45FA-AD24-9266D3077D6D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
