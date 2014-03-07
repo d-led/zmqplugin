@@ -30,3 +30,5 @@ _ReSharper*/
 *.opensdf
 *.sdf
 packages/
+UpgradeLog.htm
+UpgradeLog*.htm
