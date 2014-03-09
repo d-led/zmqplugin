@@ -83,6 +83,11 @@ namespace zmq_plugin {
                     call c;
                     obj.convert(&c);
 
+                    if (c.name=="echo") {
+                        reply(request_string);
+                        continue;
+                    }
+
                     auto call_function = call_map.find(c.name);
                     if (call_function!=call_map.end()) {
                         reply(call_function->second(c.parameters));
@@ -142,6 +147,7 @@ namespace zmq_plugin {
             }
         };
 
+
         call_map["sort_max"] =[](std::vector<std::string> parameters) {
             if (parameters.size()!=1)
                 throw std::invalid_argument("add requires a list of integers");
@@ -172,9 +178,11 @@ namespace zmq_plugin {
 
     void benchmark() {
         size_t count = 10000000;
+        std::cout<<"benchmarking native ["<<count<<"]..."<<std::endl;
         std::vector<int> numbers(count);
         std::generate(numbers.begin(),numbers.end(),[](){ static int i=1; return i++; });
         std::reverse(numbers.begin(),numbers.end());
+        std::cout<<"Data size: "<<(sizeof(numbers)+count*sizeof(int))/1048576.<<" MB"<<std::endl;
         for (int i=0; i<3; i++) {
             auto start = std::chrono::high_resolution_clock::now();
 

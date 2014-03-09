@@ -110,6 +110,12 @@ namespace zmqpluginuser
                             // overhead measurement
                             int count = 10000000;
                             var numbers = Enumerable.Range(1, count).Reverse().ToList();
+                            Console.WriteLine("benchmarking communication [{0}]", count);
+                            Console.WriteLine("Message length: {0} MB",
+                            new call {
+                                name = "sort_max".ToASCII(),
+                                parameters = { numbers.Pack() }
+                            }.Pack().Length / 1048576f);
                             var benchmark_call = new call
                                         {
                                             name = "sort_max".ToASCII(),
@@ -122,6 +128,23 @@ namespace zmqpluginuser
                                 Console.WriteLine(Extensions.Time(() =>
                                 {
                                     var _ = my_plugin.call(benchmark_call);
+                                }));
+                            }
+
+                            // echo measurement
+                            Console.WriteLine("benchmarking echo+deserialization...");
+                            var echo_call = new call
+                                        {
+                                            name = "echo".ToASCII(),
+                                            parameters = {
+                                                numbers.Pack()
+                                            }
+                                        }.Pack();
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Console.WriteLine(Extensions.Time(() =>
+                                {
+                                    var _ = my_plugin.call(echo_call);
                                 }));
                             }
                             break;
