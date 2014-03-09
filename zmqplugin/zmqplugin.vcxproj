@@ -16,7 +16,16 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="call_dispatcher.cpp" />
+    <ClCompile Include="configuration.cpp" />
+    <ClCompile Include="plugin_server.cpp" />
     <ClCompile Include="zmqplugin.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="call.h" />
+    <ClInclude Include="call_dispatcher.h" />
+    <ClInclude Include="configuration.h" />
+    <ClInclude Include="plugin_server.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{384DC310-EC1C-45FA-AD24-9266D3077D6D}</ProjectGuid>
