@@ -31,11 +31,11 @@ namespace zmq_plugin {
 		bool cancelled;
 	public:
 		plugin_server(std::string const& connection):
-			context(1,256),
-			socket(context, ZMQ_SUB),
+			context(1),
+			socket(context, ZMQ_PAIR),
 			cancelled(false)
 		{
-			socket.connect(connection.c_str());//"tcp://localhost:5555"
+			socket.bind(connection.c_str());
 		}
 
 		void loop() {

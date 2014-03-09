@@ -15,16 +15,18 @@ namespace zmqpluginuser
         {
             try
             {
+                Console.WriteLine(Path.GetFullPath("."));
+                Console.WriteLine(File.Exists("zmqplugin.dll"));
                 using (var my_plugin = new zmq_plugin("zmqplugin.dll"))
                 {
-                    int load_result = my_plugin.load(JsonConvert.SerializeObject(
+                    var load_result = my_plugin.load(JsonConvert.SerializeObject(
                         new config
                         {
                             protocol = "msgpack",
-                            plugin_connection_string = "tcp://*:5555"
+                            plugin_connection_string = "tcp://localhost:5555"
                         }
                        ));
-                    if (load_result == 0)
+                    if (load_result == zmqpluginuser.load_result.OK)
                     {
                         Console.WriteLine("loaded correctly");
                     }
