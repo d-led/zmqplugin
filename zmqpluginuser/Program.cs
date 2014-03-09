@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -54,6 +55,17 @@ namespace zmqpluginuser
         {
             return System.Text.Encoding.ASCII.GetBytes(s);
         }
+
+        /// <summary>
+        /// http://stackoverflow.com/a/969327/847349
+        /// </summary>
+        public static TimeSpan Time(Action action)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            action();
+            stopwatch.Stop();
+            return stopwatch.Elapsed;
+        }
     }
 
     class Program
@@ -94,6 +106,24 @@ namespace zmqpluginuser
                             res = my_plugin.call(new call { name = "add".ToASCII() }.Pack());
                             err_res = System.Text.Encoding.ASCII.GetString(Extensions.UnpackMsg<byte[]>(res));
                             Console.WriteLine(err_res);
+
+                            // overhead measurement
+                            int count = 10000000;
+                            var numbers = Enumerable.Range(1, count).Reverse().ToList();
+                            var benchmark_call = new call
+                                        {
+                                            name = "sort_max".ToASCII(),
+                                            parameters = {
+                                                numbers.Pack()
+                                            }
+                                        }.Pack();
+                            for (int i = 0; i < 3; i++)
+                            {
+                                Console.WriteLine(Extensions.Time(() =>
+                                {
+                                    var _ = my_plugin.call(benchmark_call);
+                                }));
+                            }
                             break;
                         case zmqpluginuser.load_result.FAILED_CONNECTING:
                             Console.WriteLine("failed connecting");

@@ -15,6 +15,7 @@
 #include <functional>
 #include <numeric>
 #include <exception>
+#include <chrono>
 
 namespace zmq_plugin {
 
@@ -100,6 +101,7 @@ namespace zmq_plugin {
         ~plugin_server() {
             if (socket.connected())
                 socket.disconnect(connection_string.c_str());
+            std::cerr<<"disconnecting"<<std::endl;
         }
     };
 
@@ -139,10 +141,55 @@ namespace zmq_plugin {
                 throw std::invalid_argument("add requires a list of integers");
             }
         };
+
+        call_map["sort_max"] =[](std::vector<std::string> parameters) {
+            if (parameters.size()!=1)
+                throw std::invalid_argument("add requires a list of integers");
+            try {
+                auto start = std::chrono::high_resolution_clock::now();
+                // unpack
+                msgpack::unpacked argv;
+                msgpack::unpack(&argv,parameters.front().data(),parameters.front().size());
+                std::vector<int> numbers;
+                argv.get().convert(&numbers);
+
+                // calculate
+                std::sort(numbers.begin(),numbers.end());
+                int res = numbers.back();
+
+                // pack
+                msgpack::sbuffer sbuf;
+                msgpack::pack(sbuf, res);
+
+                auto end = std::chrono::high_resolution_clock::now();
+                std::cout<<std::chrono::duration_cast<std::chrono::milliseconds> (end-start).count() << " ms (unpack/calculate/pack)" << std::endl;
+                return std::string(sbuf.data(),sbuf.size());
+            } catch (...) {
+                throw std::invalid_argument("sort_max requires a list of integers");
+            }
+        };
+    }
+
+    void benchmark() {
+        size_t count = 10000000;
+        std::vector<int> numbers(count);
+        std::generate(numbers.begin(),numbers.end(),[](){ static int i=1; return i++; });
+        std::reverse(numbers.begin(),numbers.end());
+        for (int i=0; i<3; i++) {
+            auto start = std::chrono::high_resolution_clock::now();
+
+            // calculate
+            std::sort(numbers.begin(),numbers.end());
+            int res = numbers.back();
+
+            auto end = std::chrono::high_resolution_clock::now();
+            std::cout<<std::chrono::duration_cast<std::chrono::milliseconds> (end-start).count() << " ms" << std::endl;
+        }
     }
 }
 
 extern "C" ZMQ_PLUGIN int load_plugin (const char* config) {
+    zmq_plugin::benchmark();
     zmq_plugin::initialize_dispatcher();
     zmq_plugin::config cfg;
     picojson::convert::from_string(config,cfg);
