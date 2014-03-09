@@ -9,6 +9,7 @@
 #include "call.h"
 #include "plugin_server.h"
 
+#include <picojson_serializer.h>
 #include <string>
 #include <iostream>
 #include <zmq.hpp>
