@@ -81,7 +81,7 @@ namespace zmqpluginuser
                             {
                                 name = "add".ToASCII(),
                                 parameters = {
-                                    new List<int>{2,3}.Pack()
+                                    new List<int>{2,3,5}.Pack()
                                 }
                             }.Pack());
                             int call_res = Extensions.UnpackMsg<int>(res);
