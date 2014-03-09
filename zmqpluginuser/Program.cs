@@ -91,6 +91,9 @@ namespace zmqpluginuser
                             res = my_plugin.call(new call { name = "bla".ToASCII() }.Pack() );
                             string err_res = System.Text.Encoding.ASCII.GetString(Extensions.UnpackMsg<byte[]>(res));
                             Console.WriteLine(err_res);
+                            res = my_plugin.call(new call { name = "add".ToASCII() }.Pack());
+                            err_res = System.Text.Encoding.ASCII.GetString(Extensions.UnpackMsg<byte[]>(res));
+                            Console.WriteLine(err_res);
                             break;
                         case zmqpluginuser.load_result.FAILED_CONNECTING:
                             Console.WriteLine("failed connecting");
