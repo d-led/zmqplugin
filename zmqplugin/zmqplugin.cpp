@@ -86,10 +86,10 @@ namespace zmq_plugin {
                     if (call_function!=call_map.end()) {
                         reply(call_function->second(c.parameters));
                     } else {
-                        throw std::invalid_argument("no such function");
+                        throw std::runtime_error(std::string("no such function : ")
+                            .append(c.name));
                     }
                 } catch (std::exception& e) {
-                    std::cerr<<e.what()<<std::endl;
                     msgpack::sbuffer sbuf;
                     msgpack::pack(sbuf, std::string(e.what()));
                     reply(std::string(sbuf.data(),sbuf.size()));
