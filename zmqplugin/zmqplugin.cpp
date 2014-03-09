@@ -45,11 +45,12 @@ namespace zmq_plugin {
 			while (!cancelled) {
 				zmq::message_t request;
 				socket.recv (&request);
-				std::string rep("World!");
+				std::string request_string(static_cast<char*>(request.data()),request.size());
+				std::string rep = (request_string=="hello") ?
+					"World!" : request_string;
 				zmq::message_t reply(rep.length());
 				memcpy ((void *) reply.data (), rep.c_str(), rep.length());
 				socket.send (reply);
-				cancelled=true;
 			}
 		}
 

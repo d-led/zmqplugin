@@ -64,5 +64,11 @@ namespace zmqpluginuser
             client.Send("hello", System.Text.Encoding.ASCII);
             return client.Recv(System.Text.Encoding.ASCII);
         }
+
+        public byte[] call(byte[] message)
+        {
+            client.Send(message);
+            return client.Recv();
+        }
     }
 }
