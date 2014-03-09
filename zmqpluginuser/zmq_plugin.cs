@@ -34,7 +34,7 @@ namespace zmqpluginuser
             client = context.Socket(ZMQ.SocketType.PAIR);
             try
             {
-                client.Connect("tcp://localhost:5556");
+                client.Connect(cfg.connect_string);
             }
             catch
             {
@@ -57,6 +57,12 @@ namespace zmqpluginuser
                 context.Dispose();
             if (my_plugin != null)
                 my_plugin.Dispose();
+        }
+
+        public string hello()
+        {
+            client.Send("hello", System.Text.Encoding.ASCII);
+            return client.Recv(System.Text.Encoding.ASCII);
         }
     }
 }

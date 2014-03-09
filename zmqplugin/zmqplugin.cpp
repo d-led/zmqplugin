@@ -30,11 +30,13 @@ namespace zmq_plugin {
 		zmq::context_t context;
 		zmq::socket_t socket;
 		bool cancelled;
+		std::string connection_string;
 	public:
 		plugin_server(std::string const& connection):
 			context(1),
 			socket(context, ZMQ_PAIR),
-			cancelled(false)
+			cancelled(false),
+			connection_string(connection)
 		{
 			socket.bind(connection.c_str());
 		}
@@ -49,6 +51,11 @@ namespace zmq_plugin {
 				socket.send (reply);
 				cancelled=true;
 			}
+		}
+
+		~plugin_server() {
+			if (socket.connected())
+				socket.disconnect(connection_string.c_str());
 		}
 	};
 
