@@ -8,20 +8,21 @@
 #include <string>
 #include <iostream>
 #include <zmq.hpp>
+#include <thread>
 
 namespace zmq_plugin {
 
 	///
 	struct config {
 		std::string protocol;
-		std::string plugin_connection_string;
+		std::string bind_string;
 
 		friend class picojson::convert::access;
 		template<class Archive>
 		void json(Archive & ar)
 		{
 			ar & picojson::convert::member("protocol", protocol);
-			ar & picojson::convert::member("plugin_connection_string", plugin_connection_string);
+			ar & picojson::convert::member("bind_string", bind_string);
 		}
 	};
 
@@ -55,8 +56,10 @@ namespace zmq_plugin {
 	int try_connect(config const& cfg) {
 		try {
 			if (cfg.protocol == "msgpack") {
-				plugin_server server(cfg.plugin_connection_string);
-				server.loop();
+				std::thread([=](){
+					plugin_server server(cfg.bind_string);
+					server.loop();
+				}).detach();
 				return 0;
 			} else {
 				return 1;

@@ -20,6 +20,8 @@ namespace zmqpluginuser
         public delegate int plugin_loader_delegate([MarshalAs(UnmanagedType.LPStr)] string config);
         UnmanagedLibrary my_plugin;
         plugin_loader_delegate plugin_loader;
+        ZMQ.Context context;
+        ZMQ.Socket client;
 
         public load_result load(string config)
         {
@@ -28,7 +30,16 @@ namespace zmqpluginuser
                 return load_result.FAILED_LOADING;
 
             var cfg = JsonConvert.DeserializeObject<config>(config);
-
+            context = new ZMQ.Context();
+            client = context.Socket(ZMQ.SocketType.PAIR);
+            try
+            {
+                client.Connect("tcp://localhost:5556");
+            }
+            catch
+            {
+                return load_result.FAILED_CONNECTING;
+            }
             return load_result.OK;
         }
 
@@ -40,6 +51,10 @@ namespace zmqpluginuser
 
         public void Dispose()
         {
+            if (client != null)
+                client.Dispose();
+            if (context != null)
+                context.Dispose();
             if (my_plugin != null)
                 my_plugin.Dispose();
         }

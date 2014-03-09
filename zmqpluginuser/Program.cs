@@ -23,12 +23,21 @@ namespace zmqpluginuser
                         new config
                         {
                             protocol = "msgpack",
-                            plugin_connection_string = "tcp://localhost:5555"
+                            bind_string = "tcp://*:5556",
+                            connect_string = "tcp://localhost:5556"
                         }
                        ));
-                    if (load_result == zmqpluginuser.load_result.OK)
+                    switch (load_result)
                     {
-                        Console.WriteLine("loaded correctly");
+                        case zmqpluginuser.load_result.OK:
+                            Console.WriteLine("loaded correctly");
+                            break;
+                        case zmqpluginuser.load_result.FAILED_CONNECTING:
+                            Console.WriteLine("failed connecting");
+                            break;
+                        case zmqpluginuser.load_result.FAILED_LOADING:
+                            Console.WriteLine("failed loading");
+                            break;
                     }
                 }
 

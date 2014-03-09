@@ -9,6 +9,7 @@ namespace zmqpluginuser
     public class config
     {
         public string protocol { get; set; }
-        public string plugin_connection_string { get; set; }
+        public string bind_string { get; set; }
+        public string connect_string { get; set; }
     }
 }
