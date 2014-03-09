@@ -9,17 +9,11 @@
 #include "call.h"
 #include "plugin_server.h"
 
-#include <picojson_serializer.h>
 #include <string>
 #include <iostream>
 #include <zmq.hpp>
 #include <thread>
 #include <vector>
-#include <msgpack.hpp>
-#include <unordered_map>
-#include <functional>
-#include <numeric>
-#include <exception>
 #include <chrono>
 
 namespace zmq_plugin {
