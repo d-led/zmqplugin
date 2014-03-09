@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MsgPack.Serialization;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,6 +26,34 @@ namespace zmqpluginuser
             System.Buffer.BlockCopy(bytes, 0, chars, 0, bytes.Length);
             return new string(chars);
         }
+
+        public static byte[] PackMsg<T>(T t)
+        {
+            var serializer = MessagePackSerializer.Create<T>();
+            return serializer.PackSingleObject(t);
+        }
+
+        public static byte[] Pack<T>(this T t)
+        {
+            return PackMsg(t);
+        }
+
+        public static T UnpackMsg<T>(byte[] t)
+        {
+            var serializer = MessagePackSerializer.Create<T>();
+            return serializer.UnpackSingleObject(t);
+        }
+
+        public static T Unpack<T>(this byte[] t)
+        {
+            var serializer = MessagePackSerializer.Create<T>();
+            return serializer.UnpackSingleObject(t);
+        }
+
+        public static byte[] ToASCII(this string s)
+        {
+            return System.Text.Encoding.ASCII.GetBytes(s);
+        }
     }
 
     class Program
@@ -47,9 +76,16 @@ namespace zmqpluginuser
                     {
                         case zmqpluginuser.load_result.OK:
                             Console.WriteLine("Hello {0}", my_plugin.hello());
-                            var message = "bla".ToByteArray();
-                            var reply = my_plugin.call(message);
-                            Console.WriteLine("Echo ok: {0}", reply.SequenceEqual(message));
+                            var res = my_plugin.call(
+                            new call
+                            {
+                                name = "add".ToASCII(),
+                                parameters = {
+                                    new List<int>{2,3}.Pack()
+                                }
+                            }.Pack());
+                            int call_res = Extensions.UnpackMsg<int>(res);
+                            Console.WriteLine("Result: {0}", call_res);
                             break;
                         case zmqpluginuser.load_result.FAILED_CONNECTING:
                             Console.WriteLine("failed connecting");
